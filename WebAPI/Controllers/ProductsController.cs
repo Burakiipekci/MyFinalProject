@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -16,6 +17,8 @@ namespace WebAPI.Controllers
     public class ProductsController : ControllerBase
     {
         //Loosely coupled
+        //naming convention
+        //IoC Container -- Inversion of Control
         IProductService _productService;
 
         public ProductsController(IProductService productService)
@@ -23,17 +26,20 @@ namespace WebAPI.Controllers
             _productService = productService;
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("getall")]
         public IActionResult GetAll()
-        {    
+        {
+            Thread.Sleep(5000);
             var result = _productService.GetAll();
             if (result.Success)
             {
                 return Ok(result);
             }
-            return BadRequest(result);                                    
+            return BadRequest(result);
+
         }
-        [HttpGet("GetById")]
+
+        [HttpGet("getbyid")]
         public IActionResult GetById(int id)
         {
             var result = _productService.GetById(id);
@@ -41,9 +47,11 @@ namespace WebAPI.Controllers
             {
                 return Ok(result);
             }
+
             return BadRequest(result);
         }
-        [HttpPost("Add")]
+
+        [HttpPost("add")]
         public IActionResult Add(Product product)
         {
             var result = _productService.Add(product);
@@ -53,5 +61,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
+
     }
 }
